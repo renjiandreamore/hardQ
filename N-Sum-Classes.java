@@ -51,8 +51,53 @@ public class Solution {
         return diff;
     }
     
+    //3Sum
+    //排序后，[-4,-1,-1,0,1,2] i指在-4， left -1， right 2， left + right 要 == 4， 左右移动。 循环结束i++。 注意corner case！
     
-    
+    /**
+     * @param numbers : Give an array numbers of n integer
+     * @return : Find all unique triplets in the array which gives the sum of zero.
+     */
+    public ArrayList<ArrayList<Integer>> threeSum(int[] numbers) {
+        // write your code here
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        
+        if(numbers == null || numbers.length == 0) return res;
+        Arrays.sort(numbers);
+        
+        for(int i = 0; i < numbers.length - 2; i++) {
+            
+            int left = i + 1, right = numbers.length - 1;
+            int diff = 0 - numbers[i];
+            if(i != 0 && numbers[i] == numbers[i-1]){
+                continue;
+            }
+            while(left < right) {
+                if(numbers[left] + numbers[right] == diff) {
+                    ArrayList<Integer> path = new ArrayList<>();
+                    path.add(numbers[i]);
+                    path.add(numbers[left]);
+                    path.add(numbers[right]);
+                    res.add(path);
+                    left++; right--;
+                    while(left < right && numbers[left] == numbers[left - 1]){
+                        left ++;
+                    }
+                    while(left < right && numbers[right] == numbers[right + 1]){
+                        right --;
+                    }
+                }
+                else if(numbers[left] + numbers[right] < diff) {
+                    left ++;
+                }
+                else {
+                    right --;
+                }
+            }
+        }
+        
+        return res;
+    } 
     
     
     
