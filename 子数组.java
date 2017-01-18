@@ -67,4 +67,76 @@ public class Solution {
         
         return res;
     }
+    
+    
+    /**
+     * @param nums: A list of integers
+     * @return: An integer indicate the value of maximum difference between two
+     *          Subarrays
+     给定一个整数数组，找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大。
+     */
+    public int maxDiffSubArrays(int[] nums) {
+        // write your code here
+        if(nums == null || nums.length == 0) return 0;
+        
+        int n = nums.length;
+        int[] leftMax = new int[n];
+        int[] rightMin = new int[n];
+        int[] leftMin = new int[n];
+        int[] rightMax = new int[n];
+        
+        int sum = 0;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        
+        //leftMax
+        for(int i = 0; i < n; i++) {
+            sum += nums[i];
+            max = Math.max(max, sum);
+            if(sum < 0) sum = 0;
+            leftMax[i] = max;
+        }
+        
+        sum = 0;
+        //leftMin
+        for(int i = 0; i < n; i++) {
+            sum += nums[i];
+            min = Math.min(min, sum);
+            if(sum > 0) sum = 0;
+            leftMin[i] = min;
+        }
+        
+        sum = 0;
+        max = Integer.MIN_VALUE;
+        //rightMax
+        for(int i = n - 1; i >= 0; i--) {
+            sum += nums[i];
+            max = Math.max(max, sum);
+            if(sum < 0) sum = 0;
+            rightMax[i] = max;
+        }
+        
+        sum = 0;
+        min = Integer.MAX_VALUE;
+        //rightMin
+        for(int i = n - 1; i >= 0; i--) {
+            sum += nums[i];
+            min = Math.min(min, sum);
+            if(sum > 0) sum = 0;
+            rightMin[i] = min;
+        }
+        
+        int diff1 = Integer.MIN_VALUE;
+        int diff2 = Integer.MIN_VALUE;
+        
+        for(int i = 0; i < n - 1; i++) {
+            diff1 = Math.max(leftMax[i] - rightMin[i+1], diff1);
+        }
+        
+        for(int i = 0; i < n - 1; i++) {
+            diff2 = Math.max(rightMax[i+1] - leftMin[i], diff2);
+        }
+        
+        return Math.max(diff1, diff2);
+    }
 }
