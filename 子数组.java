@@ -28,6 +28,41 @@ public class Solution {
         return max;
     }
     
+    /**
+     * @param A an integer array
+     * @return  A list of integers includes the index of the first number and the index of the last number
+     这个也是最大子数组，不过不同于上面只求最大值， 它求得是最大子数组的两个下标。
+     */
+    public ArrayList<Integer> continuousSubarraySum(int[] A) {
+        // Write your code here
+        ArrayList<Integer> res = new ArrayList<>();
+        if(A == null || A.length == 0) return res;
+        
+        res.add(0);
+        res.add(0);
+        
+        int sum = 0;
+        int max = -0x7fffffff;
+        int left = 0, right = A.length - 1;
+        
+        for(int i = 0; i < A.length; i++) {
+            if(sum >= 0){
+                sum += A[i];
+                right = i;
+            }
+            else{
+                left = right = i;
+                sum = A[i];
+            }
+            if(sum > max) {
+                max = sum;
+                res.set(0, left);
+                res.set(1, right);
+            }
+        }
+        return res;
+    }
+    
     
     
     /**
