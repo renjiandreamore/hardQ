@@ -139,4 +139,34 @@ public class Solution {
         
         return Math.max(diff1, diff2);
     }
+    
+    
+    /**
+     * @param nums: an array of integers
+     * @param s: an integer
+     * @return: an integer representing the minimum size of subarray
+     给定一个由 n 个整数组成的数组和一个正整数 s ，请找出该数组中满足其和 ≥ s 的最小长度子数组。如果无解，则返回 -1。
+     */
+    public int minimumSize(int[] nums, int s) {
+        // write your code here
+        //maintain a window
+        if(nums == null || nums.length == 0) return -1;
+        
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        int j = 0;
+        
+        for(int i = 0; i < nums.length; i++) {
+            while(j < nums.length && sum < s) {
+                sum += nums[j++];
+            }
+            if(sum >= s) {
+                min = Math.min(min, j - i);
+            }
+            sum -= nums[i];
+        }
+        
+        if(min == Integer.MAX_VALUE) return -1;
+        return min;
+    }
 }
