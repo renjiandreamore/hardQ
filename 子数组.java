@@ -236,4 +236,59 @@ public class Solution {
     }
     
     
+   
+    /**
+     * @param nums: A list of integers
+     * @return: A list of integers includes the index of the first number 
+     *          and the index of the last number
+     对pair进行排序，就是按照前缀值从小到大排序，这样使得越接近的两个数刚刚互相挨着。那么最近接0的子段一定产生于排在相邻位置上的两个前缀。
+     */
+     //前缀和
+    
+    public int[] subarraySumClosest(int[] nums) {
+        // write your code here
+        if(nums == null || nums.length == 0) return new int[0];
+        int[] res = new int[2];
+        Point[] preSum = new Point[nums.length + 1];
+        
+        preSum[0] = new Point(0,0);
+        int prev = 0;
+        
+        for(int i = 0; i < nums.length; i++) {
+            prev += nums[i];
+            preSum[i+1] = new Point(prev, i+1);
+        }
+        
+        Arrays.sort(preSum, new Comparator<Point>(){
+            public int compare(Point a, Point b) {
+                if(a.sum == b.sum) {
+                    return a.index - b.index;
+                }
+                return a.sum - b.sum;
+            }
+        });
+        
+        int min = Integer.MAX_VALUE;
+        for(int i = 1; i < preSum.length; i++) {
+            if(min > preSum[i].sum - preSum[i-1].sum){
+                min = preSum[i].sum - preSum[i-1].sum;
+                res[0] = Math.min(preSum[i].index, preSum[i-1].index);
+                res[1] = Math.max(preSum[i].index, preSum[i-1].index) - 1;
+            }
+        }
+        
+        return res;
+    }
+}
+
+class Point{
+    int sum;
+    int index;
+    public Point(int sum, int index) {
+        this.sum = sum;
+        this.index = index;
+    }
+}
+    
+    
 }
