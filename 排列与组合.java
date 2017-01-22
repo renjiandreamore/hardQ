@@ -246,9 +246,41 @@ public class Solution {
             visited[i] = false;
             path.remove(path.size()-1);
         }
-    }
+    } 
+}
+
+
+
+
+class Combinations{
+    /**
+     * @param n: Given the range of numbers
+     * @param k: Given the numbers of combinations
+     * @return: All the combinations of k numbers out of 1..n
+     */
+	
+	//12345...n 这个数，里选k个，组成组合， 返回结果。	
     
-    
-    
-    
+     public List<List<Integer>> combine(int n, int k) {
+         //write your code here
+         List<List<Integer>> res = new ArrayList<>();
+         List<Integer> path = new ArrayList<>();
+         helper(n, k, path, res, 1);
+         return res;
+     }
+     
+     public void helper(int n, int k, List<Integer> path, List<List<Integer>> res, int index) {
+         if(path.size() == k){
+             res.add(new ArrayList<Integer>(path));
+             return;
+         }
+         
+         for(int i = index; i <= n; i++) {
+             path.add(i);
+             helper(n, k, path, res, i + 1);
+             path.remove(path.size() - 1);
+         }
+     }
+   
+
 }
