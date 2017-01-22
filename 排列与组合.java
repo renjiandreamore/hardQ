@@ -356,5 +356,53 @@ class Combinations{
             path.remove(path.size() - 1);
         }
     }
+	
+	
+	//电话号码字母组合
+	
+/**
+     * @param digits A digital string
+     * @return all posible letter combinations
+     */
+    public ArrayList<String> letterCombinations(String digits) {
+        // Write your code here
+        ArrayList<String> res = new ArrayList<>();
+        if(digits == null || digits.length() == 0) return res;
+        
+        HashMap<Character, char[]> map = new HashMap<>();
+        map.put('2', new char[]{'a','b','c'});
+        map.put('3', new char[]{'d','e','f'});
+        map.put('4', new char[]{'g','h','i'});
+        map.put('5', new char[]{'j','k','l'});
+        map.put('6', new char[]{'m','n','o'});
+        map.put('7', new char[]{'p','q','r','s'});
+        map.put('8', new char[]{'t','u','v'});
+        map.put('9', new char[]{'w','x','y','z'});
+        
+        StringBuilder sb = new StringBuilder();
+        
+        helper(digits, map, sb, res, 0);
+        
+        return res;
+    }
+    
+    public void helper(String s, HashMap<Character, char[]> map, StringBuilder sb, ArrayList<String> res, int index) {
+        //s = "234"
+        if(sb.length() == s.length()) {
+            res.add(sb.toString());
+            return;
+        }
+        
+        //要找到一个变量，可以通过单一的变化，从s.charAt(0)的char[]数组
+        //直接跳到s.charAt(1)的char[] 数组
+        //于是我们想到sb.length(); 或者加一个变量index表示指向input里的第几个char
+        
+        for(char c : map.get(s.charAt(index))){
+            sb.append(c);
+            helper(s, map, sb, res, index + 1);
+            sb.deleteCharAt(sb.length()-1);
+        }  
+        
+    }
 
 }
