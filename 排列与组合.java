@@ -32,6 +32,42 @@ public class Solution {
         return res + 1;
     }
     
+	
+				//这道题要着重看！！！   是第几个排列呢？还tm带有重复数字？   
+			// <A[i]的个数*它后面个数的！/(它后面元素里重复元素a出现的次数a! * 重复元素b出现次数b! *....) 
+     /**
+     * @param A an integer array
+     * @return a long integer
+     */
+    public long permutationIndexII(int[] A) {
+        // Write your code here
+        if(A == null || A.length == 0) return 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        long fact = 1, malFact = 1;
+        long res = 0;
+        
+        for(int i = A.length - 1; i >= 0; i--){
+            if(!map.containsKey(A[i])){
+                map.put(A[i], 1);
+            }
+            else{
+                map.put(A[i], map.get(A[i]) + 1);
+                malFact *= map.get(A[i]);
+            }
+            int count = 0;
+            for(int j = i + 1; j < A.length; j++) {
+                if(A[i] > A[j]) {
+                    count ++;
+                }
+            }
+            
+            res += count * fact / malFact;
+            fact *= A.length - i;
+        }
+        
+        return res + 1;
+    }
     
     
     
