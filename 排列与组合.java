@@ -1,9 +1,46 @@
 public class Solution {
+	
+	//最需要看的一个！！ permutation sequence
+	public String getPermutation(int n, int k) {
+        //k --> k-1
+        //(n-1)!
+        if(k <= 0) return "";
+        
+        ArrayList<Character> list = new ArrayList<>();
+        for(int i = 1; i <= n; i++) {
+            list.add((char)('0'+i));
+        }
+        //['1','2','3','4'];
+        
+        int factor = 1;
+        for(int i = 1; i <= n; i++) {
+            factor *= i;
+        }
+        StringBuffer sb = new StringBuffer();
+        k = k - 1;
+        for(int i = n; i >= 1; i--) {
+            factor = factor / i; //(n-1)!
+            int index = k / factor;
+            k = k % factor;
+            
+            sb.append(list.get(index));
+            list.remove(list.get(index));
+        }
+        
+        return sb.toString();
+    }
+	
+	//1. 以某一数字开头的排列有(n-1)! 个。
+//例如： 123， 132， 以1开头的是 2！个
+//2. 所以第一位数字就可以用 （k-1） / (n-1)!  来确定 .这里K-1的原因是，序列号我们应从0开始计算，否则在边界时无法计算。
+//3. 第二位数字。假设前面取余后为m，则第二位数字是 第 m/(n-2)! 个未使用的数字。
+	
+	
+	
     /**
      * @param A an integer array
      * @return a long integer
      */
-     
      //1. 排列序号1
     public long permutationIndex(int[] A) {
         // Write your code here
