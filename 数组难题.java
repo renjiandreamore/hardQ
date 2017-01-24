@@ -33,4 +33,38 @@ public class Solution {
         
         return A.length + 1; //[1,2,3]这种
     }
+    
+    
+    //搜索rotated sorted array II 注意A[start] == A[mid]情况
+    /** 
+     * param A : an integer ratated sorted array and duplicates are allowed
+     * param target :  an integer to be search
+     * return : a boolean 
+     */
+    public boolean search(int[] A, int target) {
+        //write your code here
+        if(A == null || A.length == 0) return false;
+        
+        int start = 0, end = A.length - 1;
+        
+        while(start + 1 < end) {
+            int mid = start + (end - start)/2;
+            if(A[start] > A[mid]) {
+                if(A[mid] < target && target <= A[end]) start = mid;
+                else end = mid;
+            }
+            else if(A[start] == A[mid]){
+                start ++;
+            }
+            else{
+                if(A[start] <= target && target <= A[mid]) end = mid;
+                else start = mid;
+            }
+        }
+        
+        if(A[start] == target) return true;
+        if(A[end] == target) return true;
+        return false;
+        
+    }
 }
