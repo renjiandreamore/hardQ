@@ -67,4 +67,67 @@ public class Solution {
         return false;
         
     }
+    
+    
+    
+    
+    //trapping rain water!!!!!!!
+    //一定要理解反复多看！！！
+    /**
+     * @param heights: an array of integers
+     * @return: a integer
+     */
+     //对任意位置i，在i上的积水，由左右两边最高的bar：A[left] = max{A[j], j<i}, A[right] = max{A[j], j>i}决定。定义Hmin = min(A[left], A[right])，则积水量Si为：
+        //Hmin <= A[i]时，Si = 0
+        //Hmin > A[i]时，Si = Hmin - A[i]
+    public int trapRainWater(int[] heights) {
+        // write your code here
+        if(heights == null || heights.length == 0) return 0;
+        
+        // int[] left_height_max = new int[heights.length];
+        // int[] right_height_max = new int[heights.length];
+        
+        // for(int i = 1, j = heights.length - 2; i < heights.length && j >=0; i++, j--) {
+        //     left_height_max[i] = Math.max(left_height_max[i-1], heights[i-1]);
+        //     right_height_max[j] = Math.max(right_height_max[j+1], heights[j+1]);
+        // }
+        
+        // int water = 0;
+        // for(int i = 1; i < heights.length-1; i++) {
+        //     int min_height = Math.min(left_height_max[i], right_height_max[i]);
+        //     if(min_height > heights[i]) {
+        //         water += min_height - heights[i];
+        //     }
+        // }
+        
+        // return water;
+        
+        int left = 0, right = heights.length - 1;
+        int left_height_max = heights[left];
+        int right_height_max = heights[right];
+        
+        int water = 0;
+        
+        while(left < right) {
+            if(left_height_max <= right_height_max) {
+                left++;
+                if(left_height_max > heights[left]){
+                    water += left_height_max - heights[left];
+                }
+                else{
+                    left_height_max = heights[left];
+                }
+            }else{
+                right--;
+                if(right_height_max > heights[right]){
+                    water += right_height_max - heights[right];
+                }
+                else{
+                    right_height_max = heights[right];
+                }
+            }
+        }
+        
+        return water;
+    }
 }
