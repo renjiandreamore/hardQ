@@ -1,4 +1,4 @@
-public class Solution {
+public class SubSequences {
     /**
      * @param A an array of Integer
      * @return  an integer
@@ -116,4 +116,13 @@ public class Solution {
         return dp[m-1][n-1];
     }
   
+}
+
+
+public class SubStrings {
+    
+    
+    
+    
+    
 }
