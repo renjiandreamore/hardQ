@@ -120,7 +120,42 @@ public class SubSequences {
 
 
 public class SubStrings {
-    
+    /*  最长公共子串
+    *   给出A=“ABCD”，B=“CBCE”，返回 2
+    */
+    public int longestCommonSubstring(String A, String B) {
+        // write your code here
+        if(A == null || B == null || A.length() == 0 || B.length() == 0) return 0;
+        
+        int m = A.length(), n = B.length();
+        
+        int[][] dp = new int[m][n];
+        
+        for(int i = 0; i < n; i++) {
+            dp[0][i] = A.charAt(0) != B.charAt(i) ? 0 : 1;
+        }
+        
+        for(int j = 0; j < m; j++) {
+            dp[j][0] = A.charAt(j) != B.charAt(0) ? 0 : 1;
+        }
+        
+        for(int i = 1; i < m; i++) {
+            for(int j = 1; j < n; j++) {
+                if(A.charAt(i) == B.charAt(j)) {
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }
+            }
+        }
+        
+        int max = 0;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                max = Math.max(max, dp[i][j]);
+            }
+        }
+        
+        return max;
+    }
     
     
     
