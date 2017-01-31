@@ -185,4 +185,52 @@ public class SubStrings {
     }
     
     
+    /**重要！！！！！！     最小子串window
+     * @param source: A string
+     * @param target: A string
+     * @return: A string denote the minimum window
+     *          Return "" if there is no such a string
+                         给出source = "ADOBECODEBANC"，target = "ABC" 满足要求的解  "BANC"
+     */
+    public String minWindow(String source, String target) {
+        // write your code
+        if(source == null || source.length() == 0 || target == null || target.length() == 0) return "";
+        
+        HashMap<Character, Integer> map = new HashMap<>();
+        for(int i = 0; i < target.length(); i++) {
+            if(!map.containsKey(target.charAt(i))) {
+                map.put(target.charAt(i), 1);
+            }else{
+                map.put(target.charAt(i), map.get(target.charAt(i))+1);
+            }
+        }
+        
+        int left = 0, right = 0;
+        int count = 0;
+        int start_point = 0, min_len = 0x7fffffff;
+        
+        while(right < source.length()) {
+            if(map.containsKey(source.charAt(right))) {
+                map.put(source.charAt(right), map.get(source.charAt(right))-1);
+                if(map.get(source.charAt(right)) >= 0) count++;
+                
+                while(count == target.length()) {
+                    if(right - left + 1 < min_len) {
+                        min_len = right - left + 1;
+                        start_point = left;
+                    }
+                    if(map.containsKey(source.charAt(left))) {
+                        map.put(source.charAt(left), map.get(source.charAt(left))+1);
+                        if(map.get(source.charAt(left)) > 0) count--;
+                    }
+                    left++;
+                }
+            }
+            right++;
+        }
+        
+        if(min_len == 0x7fffffff) return "";
+        return source.substring(start_point, start_point + min_len);
+    }
+    
 }
