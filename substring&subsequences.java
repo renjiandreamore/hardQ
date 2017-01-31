@@ -157,7 +157,32 @@ public class SubStrings {
         return max;
     }
     
-    
+    /**
+     * @param s: a string
+     * @return: an integer 
+     在"abcabcbb"中，其无重复字符的最长子字符串是"abc"，其长度为 3
+     */
+    public int lengthOfLongestSubstring(String s) {
+        // write your code here
+        if(s == null || s.length() == 0) return 0;
+        
+        HashSet<Character> set = new HashSet<>();
+        int left = 0, right = 0;
+        int sum = 0;
+        while(right < s.length()){
+            if(!set.contains(s.charAt(right))) {
+                set.add(s.charAt(right));
+                right++;
+            }
+            else{
+                set.remove(s.charAt(left));
+                left++;
+            }
+            sum = Math.max(sum, right - left);
+        }
+        
+        return sum;
+    }
     
     
 }
