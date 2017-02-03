@@ -89,9 +89,43 @@ public class Solution {
             min_2nd = curMin2;
             min_index = curMin1_index;
         }
-        
-        
-        
         return min_1st;
+    }
+    
+    
+    /*
+    
+    动态规划的方法，可以推广为n层楼，m个鸡蛋。如下分析： 假设f{n,m}表示n层楼、m个鸡蛋时找到最高楼层的最少尝试次数。
+    当第一个鸡蛋从第i层扔下，如果碎了，还剩m-1个鸡蛋，为确定下面楼层中的安全楼层，还需要f{i-1,m-1}次，找到子问题；
+    不碎的话，上面还有n-i层，还需要f[n-i,m]次，又一个子问题。 状态转移方程如下： 
+    f{n, m} = min(1 + max(f{n - 1, m - 1}, f{n - i, m}) ) 其中： i为(1, n), f{i, 1} = 1
+    int[][] dp = new int[m+1][n+1];
+    */
+    
+    public int dropEggs2(int m, int n) {
+        // Write your code here
+        int[][] dp = new int[m+1][n+1];
+        
+        for(int i = 1; i <= m; i++) {
+            dp[i][1] = 1;
+        }
+        
+        for(int i = 1; i <= n; i++) {
+            dp[1][i] = i;
+        }
+        
+        for(int i = 2; i <= m; i++) {
+            for(int j = 2; j <= n; j++) {
+                dp[i][j] = 0x7fffffff;
+                for(int k = 1; k <= j; k++) {
+                    int broke = dp[i-1][k-1]; //剩i-1个球，从k-1层扔
+                    int not_broke = dp[i][j-k]; //剩i个球，还有j-k层高度
+                    int total_min = 1 + Math.max(broke, not_broke);
+                    dp[i][j] = Math.min(dp[i][j], total_min);
+                }
+            }
+        }
+        
+        return dp[m][n];
     }
 }
