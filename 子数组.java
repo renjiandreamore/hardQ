@@ -11,7 +11,7 @@ public class Solution {
         int max = Integer.MIN_VALUE;
         //前缀和版本
         // int preSumMin = 0;
-        
+         
         // for(int i = 0; i < nums.length; i++) {
         //     sum += nums[i];
         //     max = Math.max(sum - preSumMin, max);
