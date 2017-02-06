@@ -168,4 +168,41 @@ public class Solution {
         
         return res;
     }
+    
+    
+    /**  word break ii
+     * @param s a string
+     * @param wordDict a set of words
+     */
+    public List<String> wordBreak(String s, Set<String> wordDict) {
+        // Write your code here
+        HashMap<String, List<String>> map = new HashMap<>();
+        return helper(s, wordDict, map);
+    }
+    
+    public List<String> helper(String s, Set<String> dict, HashMap<String, List<String>> map) {
+        if(map.containsKey(s)){
+            return map.get(s);
+        }
+        List<String> res = new ArrayList<>();
+        for(int i = 1; i <= s.length(); i++) {
+            String prefix = s.substring(0, i);
+            if(dict.contains(prefix)) {
+                if(i == s.length()){
+                    res.add(prefix);
+                }
+                else{
+                    String postfix = s.substring(i);
+                    List<String> tmp = helper(postfix, dict, map);
+                    for(String ss : tmp){ // 空集不执行此行
+                        String str = prefix + " " + ss;
+                        res.add(str);
+                    }
+                }
+            }
+        }
+        
+        map.put(s, res);
+        return res;
+    }
 }
