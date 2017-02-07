@@ -78,7 +78,7 @@ public class Solution {
         //             dp[j] += dp[j-nums[i]];
         //         }
         //     }
-        // }  //这样输出的是单一答案 : [1,1,2] 和 [2,1,1] 是一样的， 是背包4的解
+        // }  //这样输出的是单一答案 : [1,1,2] 和 [2,1,1] 是一样的， 是背包5的解
         
         for(int i = 1; i <= target; i++) {
             for(int j = 0; j < nums.length; j++) {
