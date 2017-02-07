@@ -50,4 +50,44 @@ public class Solution {
         
         return dp[n][m];
     }
+    
+    
+    //重复选择+不同排列+装满可能性总数
+    //Given nums = [1, 2, 4], target = 4
+
+/*The possible combination ways are:
+[1, 1, 1, 1]
+[1, 1, 2]
+[1, 2, 1]
+[2, 1, 1]
+[2, 2]
+[4]
+*/
+    public int backPackVI(int[] nums, int target) {
+        // Write your code here
+        if(target < 0 || nums == null || nums.length == 0) {
+            return 0;
+        }
+        
+        int[] dp = new int[target+1];
+        dp[0] = 1;
+        
+        // for(int i = 0; i < nums.length; i++) {
+        //     for(int j = 1; j <= target; j++) {
+        //         if(j >= nums[i]){
+        //             dp[j] += dp[j-nums[i]];
+        //         }
+        //     }
+        // }  //这样输出的是单一答案 : [1,1,2] 和 [2,1,1] 是一样的， 是背包4的解
+        
+        for(int i = 1; i <= target; i++) {
+            for(int j = 0; j < nums.length; j++) {
+                if(i >= nums[j]) {
+                    dp[i] += dp[i-nums[j]];
+                }
+            }
+        }
+        
+        return dp[target];
+    }
 }
