@@ -88,9 +88,72 @@ public class Solution {
     }
   
   
+  /*
+  Given org = [1,2,3], seqs = [[1,2],[1,3]]
+  Return false
+  Explanation:
+  [1,2,3] is not the only one sequence that can be reconstructed, 
+  because [1,3,2] is also a valid sequence that can be reconstructed.
+
+  Given org = [1,2,3], seqs = [[1,2]]
+  Return false
+  Explanation:
+  The reconstructed sequence can only be [1,2].
+
+  Given org = [1,2,3], seqs = [[1,2],[1,3],[2,3]]
+  Return true
+  Explanation:
+  The sequences [1,2], [1,3], and [2,3] can uniquely reconstruct the original sequence [1,2,3].
+  */
   
-  
-  
-  
+  //本质是BFS找拓扑排序，看能否按照其顺序全部排完
+  public boolean sequenceReconstruction(int[] org, int[][] seqs) {
+        // Write your code here
+        if((seqs.length == 0 || seqs[0].length == 0) && org.length > 0 ) return false;
+        if(org.length == 0 && seqs[0].length == 0) return true;
+        
+        HashMap<Integer, Set<Integer>> neighbors = new HashMap<>();
+        HashMap<Integer, Integer> indegree = new HashMap<>();
+        
+        for(int i : org) {
+            neighbors.put(i, new HashSet<Integer>());
+            indegree.put(i,0);
+        }
+        
+        int n = org.length;
+        for(int i = 0; i < seqs.length; i++) {
+            if(seqs[i].length > 0 && (seqs[i][0] < 1 || seqs[i][0] > n)) return false;
+            for(int j = 1; j < seqs[i].length; j++) {
+                if(seqs[i][j] < 1 || seqs[i][j] > n) return false;
+                if(!neighbors.get(seqs[i][j-1]).contains(seqs[i][j])){
+                    neighbors.get(seqs[i][j-1]).add(seqs[i][j]);
+                    indegree.put(seqs[i][j], indegree.get(seqs[i][j])+1);
+                }
+            }
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        for(int i : org) {
+            if(indegree.get(i) == 0){
+                q.offer(i);
+                break;
+            }
+        }
+        
+        int cnt = 0;
+        while(!q.isEmpty()) {
+            if(q.size()>1) return false;
+            int top = q.poll();
+            cnt++;
+            for(int neighbor : neighbors.get(top)) {
+                indegree.put(neighbor, indegree.get(neighbor)-1);
+                if(indegree.get(neighbor) == 0){
+                    q.offer(neighbor);
+                }
+            }
+        }
+        
+        return cnt == n;
+    }
   
 }
