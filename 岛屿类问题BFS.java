@@ -244,5 +244,97 @@ return 6. (Placing a post office at (1,1), the distance that post office to all 
         
         return largerThan + lessThan;
     }
+    
+    //建立postofficeII     有障碍，不能越过，要用BFS
+     /**
+     * @param grid a 2D grid
+     * @return an integer
+     Given a grid:
+
+0 1 0 0 0
+1 0 0 2 1
+0 1 0 0 0
+return 8, You can build at (1,1). (Placing a post office at (1,1), 
+the distance that post office to all the house sum is smallest.)
+     */
+    public int[] dx = {1,0,-1,0};
+    public int[] dy = {0,1,0,-1};
+    int[][] visitedTimes;
+    int[][] pathSum;
+    public int shortestDistance(int[][] grid) {
+        // Write your code here
+        if(grid == null || grid.length == 0 || grid[0].length == 0) return -1;
+        
+        int m = grid.length, n = grid[0].length;
+        List<Point> houses = new ArrayList<>();
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 1) {
+                    houses.add(new Point(i,j));
+                }
+            }
+        }
+        
+        if(houses.size() == m*n) return -1;
+        this.visitedTimes = new int[m][n];
+        this.pathSum = new int[m][n];
+        
+        for(Point p : houses) {
+            bfs(p, visitedTimes, pathSum, grid);
+        }
+        
+        List<Point> empties = new ArrayList<>();
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 0) {
+                    empties.add(new Point(i,j));
+                }
+            }
+        }
+        
+        int res = 0x7fffffff;
+        for(Point empty : empties) {
+            if(visitedTimes[empty.x][empty.y] != houses.size()){
+                continue;
+            }
+            res = Math.min(res, pathSum[empty.x][empty.y]);
+        }
+        if(res == 0x7fffffff) return -1;
+        
+        return res;
+    }
+    
+    public void bfs(Point start, int[][] visitedTimes, int[][] pathSum, int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        Queue<Point> q = new LinkedList<>();
+        boolean[][] hash = new boolean[m][n];
+        
+        q.offer(start);
+        hash[start.x][start.y] = true;
+        
+        int steps = 0;
+        while(!q.isEmpty()) {
+            int size = q.size();
+            steps++;
+            for(int i = 0; i < size; i++) {
+                Point p = q.poll();
+                for(int j = 0; j < 4; j++) {
+                    int ix = p.x + dx[j];
+                    int iy = p.y + dy[j];
+                    if(isValid(grid, ix, iy) && !hash[ix][iy]) {
+                        q.offer(new Point(ix, iy));
+                        hash[ix][iy] = true;
+                        visitedTimes[ix][iy]++;
+                        pathSum[ix][iy] += steps;
+                    }
+                }
+            }
+        }
+    }
+    
+    public boolean isValid(int[][] grid, int i, int j) {
+        if(i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 0) return true;
+        return false;
+    }
   
 }
