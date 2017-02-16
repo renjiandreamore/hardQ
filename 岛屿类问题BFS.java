@@ -155,5 +155,94 @@ public class Solution {
         
         return cnt == n;
     }
+    
+    
+    
+    
+    
+    //邮局问题
+    //邮局1
+    /*
+    Given a grid:
+
+0 1 0 0
+1 0 1 1
+0 1 0 0
+return 6. (Placing a post office at (1,1), the distance that post office to all the house sum is smallest.)
+
+
+    */
+    public int shortestDistance(int[][] grid) {
+        // Write your code here
+        if(grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        
+        int m = grid.length, n = grid[0].length;
+        List<Integer> x = new ArrayList<Integer>();
+        List<Integer> y = new ArrayList<Integer>();
+        List<Integer> sumX = new ArrayList<Integer>();
+        List<Integer> sumY = new ArrayList<Integer>();
+        
+        int houses = 0;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 1) {
+                    houses++;
+                    x.add(i);
+                    y.add(j);
+                }
+            }
+        }
+        if(houses == m*n) return -1;
+        
+        Collections.sort(x);
+        Collections.sort(y);
+        sumX.add(x.get(0));
+        sumY.add(y.get(0));
+        
+        for(int i = 1; i < x.size(); i++) {
+            sumX.add(sumX.get(i-1) + x.get(i));
+            sumY.add(sumY.get(i-1) + y.get(i));
+        }
+        
+        int res = 0x7fffffff;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 0) {
+                    int getDistance_x = getDistanceSum(sumX, x, i, houses);
+                    int getDistance_y = getDistanceSum(sumY, y, j, houses);
+                    if(getDistance_x + getDistance_y < res) {
+                        res = getDistance_x + getDistance_y;
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    public int getDistanceSum(List<Integer> sumX, List<Integer> x, int pos, int n){
+        if(pos <= x.get(0)){
+            return sumX.get(n-1) - n*pos;
+        }
+        
+        int l = 0, r = n - 1;
+        while(l + 1 < r) {
+            int mid = (l + r)/2;
+            if(x.get(mid) <= pos) {
+                l = mid;
+            }else{
+                r = mid;
+            }
+        }
+        
+        int index = 0;
+        if(x.get(r) <= pos) index = r;
+        else index = l; //index+1 means the num of houses whose location <= pos
+        
+        int largerThan = sumX.get(n-1) - sumX.get(index) - (n - index - 1)*pos;
+        int lessThan = (index + 1)*pos - sumX.get(index);
+        
+        return largerThan + lessThan;
+    }
   
 }
