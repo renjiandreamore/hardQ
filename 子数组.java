@@ -279,6 +279,31 @@ public class Solution {
         
         return res;
     }
+    
+    //最少长度>=k的最大子数组
+    public int maxSubarray4(int[] nums, int k) {
+        // Write your code here
+        if(nums == null || nums.length < k) return 0;
+        
+        int res = 0;
+        for(int i = 0; i < k; i++) {
+            res += nums[i];
+        }//前k个和
+        
+        int[] prefix_sum = new int[nums.length + 1];
+        prefix_sum[0] = 0;
+        
+        int prefix_min = 0;
+        for(int i = 1; i <= nums.length; i++) {
+            prefix_sum[i] = prefix_sum[i-1] + nums[i-1];
+            if(i > k) {
+                prefix_min = Math.min(prefix_min, prefix_sum[i-k]);
+                res = Math.max(res, prefix_sum[i] - prefix_min);
+            }//以prefix_sum[i-k]保证最少长度>=k
+        }
+        
+        return res;
+    }
 }
 
 class Point{
