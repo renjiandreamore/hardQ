@@ -53,3 +53,59 @@ class ResultType{
         this.maxLen = z;
     }
 }
+
+
+
+
+public class 二叉树的路径和2 {
+    /**
+     * @param root the root of binary tree
+     * @param target an integer
+     * @return all valid paths
+     路径可以从任何节点出发和结束，但是需要是一条一直往下走的路线。也就是说，路径上的节点的层级是逐个递增的。
+    1
+   / \
+  2   3
+ /   /
+4   2
+给定目标值6。那么满足条件的路径有两条：
+
+[
+  [2, 4],
+  [1, 3, 2]
+]
+     */
+    public List<List<Integer>> binaryTreePathSum2(TreeNode root, int target) {
+        // Write your code here
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+        List<Integer> path = new ArrayList<>();
+        helper(root, target, res, path, 0);
+        return res;
+    }
+    
+    public void helper(TreeNode root, int target, List<List<Integer>> res, List<Integer> path, int level) {
+       if(root == null) return;
+       path.add(root.val);
+       int tmp = target;
+       
+       for(int i = level; i >= 0; i--) {
+           tmp -= path.get(i);
+           //if(tmp < 0) break;
+           //不能写break, 比如1->-2->1->2, t = 2
+           //2是一个答案， 1,-2,1,2也是一个答案
+           if(tmp == 0) {
+               List<Integer> tmpt = new ArrayList<>();
+               for(int x = i; x <= level; x++) {
+                   tmpt.add(path.get(x));
+               }
+               res.add(tmpt);
+           }
+       }
+       
+       helper(root.left, target, res, path, level + 1);
+       helper(root.right, target, res, path, level + 1);
+       
+       path.remove(path.size() - 1);
+    }
+}
