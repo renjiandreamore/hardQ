@@ -317,3 +317,49 @@ class Point{
     
     
 }
+
+class DIFFICULT{
+    //[1,12,-5,-6,50,3] k = 3， 问长度最少为3的平均值最大的子数组是多少。
+    //集合了len>=k 的最大子数组的求法， 还有二分法实验平均值的做法，可谓难！
+    //先求出一个中间数(50 +  -6)/2 = 22, 假设这个值是最大平均值，
+    //把数组每个数减去这个假设的平均值， 再求长度大于k的最大子数组，看如果此时的最大子数组和有大于这个平均值的情况，就说明
+    //真正的平均值在它之上， 把二分法的left移到它身上，否则把right移过来。   知道left right的差值很小。
+    public double maxAverage(int[] nums, int k) {
+        // Write your code here
+        double left = Integer.MAX_VALUE;
+        double right = Integer.MIN_VALUE;
+        
+        for(int i : nums) {
+            left = Math.min(i, left);
+            right = Math.max(i, right);
+        }
+        
+        double sum = 0;
+        for(int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+        double res = sum/k;
+        
+        while(right - left > 0.00001) {
+            double mid = (right + left)/2.0;
+            double[] prefix_sum = new double[nums.length+1];
+            prefix_sum[0] = 0;
+            double preMin = 0;
+            boolean found = false;
+            
+            for(int i = 1; i <= nums.length; i++) {
+                prefix_sum[i] = prefix_sum[i-1] + nums[i-1] - mid;
+                if(i > k) {
+                    preMin = Math.min(preMin, prefix_sum[i-k]);
+                    if(prefix_sum[i] - preMin >= 0) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if(found) left = mid;
+            else right = mid;
+        }
+        
+        return Math.max(left, res);
+    }
