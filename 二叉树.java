@@ -109,3 +109,73 @@ public class 二叉树的路径和2 {
        path.remove(path.size() - 1);
     }
 }
+
+
+public class 二叉树路径和3 {
+    /**
+     * @param root the root of binary tree
+     * @param target an integer
+     * @return all valid paths
+     给一棵这样的二叉树：
+
+    1
+   / \
+  2   3
+ /
+4
+和目标值 target = 6。你需要返回的结果为：
+
+[
+  [2, 4],
+  [2, 1, 3],
+  [3, 1, 2],
+  [4, 2]
+]
+     */
+    
+   //不止往下还能往回走
+     
+    public List<List<Integer>> binaryTreePathSum3(ParentTreeNode root, int target) {
+        // Write your code here
+        //按这道题的方法写一下2
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+        
+        List<Integer> path = new ArrayList<>();
+        helper(root, target, res, path);
+        
+        return res;
+    }
+    
+    public void helper(ParentTreeNode root, int target, List<List<Integer>> res, List<Integer> path) {
+        if(root == null) return;
+        
+        getSum(root, target, res, path, null);
+        
+        helper(root.left, target, res, path);
+        helper(root.right, target, res, path);
+    }
+    
+    public void getSum(ParentTreeNode root, int target, List<List<Integer>> res, List<Integer> path, ParentTreeNode father) {
+        
+        if(root == null) return;
+        path.add(root.val);
+        target -= root.val;
+        
+        if(target == 0) {
+            res.add(new ArrayList<Integer>(path));
+        }
+        
+        if(root.parent != null && root.parent != father) {
+            getSum(root.parent, target, res, path, root);
+        }
+        if(root.left != null && root.left != father) {
+            getSum(root.left, target, res, path, root);
+        }
+        if(root.right != null && root.right != father) {
+            getSum(root.right, target, res, path, root);
+        }
+        
+        path.remove(path.size() - 1);
+    }
+}
