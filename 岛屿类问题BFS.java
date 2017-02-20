@@ -338,3 +338,128 @@ the distance that post office to all the house sum is smallest.)
     }
   
 }
+
+
+                                    //并查集                               UnionFind
+                                                      //路径压缩
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+public class Island2 {
+    /**
+     * @param n an integer
+     * @param m an integer
+     * @param operators an array of point
+     * @return an integer array
+     */
+    public List<Integer> numIslands2(int n, int m, Point[] operators) {
+        // Write your code here
+        List<Integer> res = new ArrayList<>();
+        if(operators == null || operators.length == 0 || n <= 0 || m <= 0) return res;
+        
+        int[][] island = new int[n][m];
+        int[] dx = {1,0,-1,0};
+        int[] dy = {0,1,0,-1};
+        
+        UnionFind uf = new UnionFind(n, m);
+        
+        int count = 0;
+        for(Point point : operators) {
+            int x = point.x, y = point.y;
+            int idA = getId(x, y, m);
+            
+            if(island[x][y] != 1) {
+                island[x][y] = 1;
+                count++;
+                
+                Queue<Point> queue = new LinkedList<>();
+                queue.offer(point);
+                while(!queue.isEmpty()) {
+                    Point ild = queue.poll();
+                    for(int i = 0; i < 4; i++) {
+                        int ix = ild.x + dx[i];
+                        int iy = ild.y + dy[i];
+                        int idB = getId(ix, iy, m);
+                        if(valid(island, ix, iy)) {
+                            int parentA = uf.compressed_find(idA);
+                            int parentB = uf.compressed_find(idB);
+                            if(parentA != parentB) {
+                                uf.union(parentA, parentB);
+                                count--;
+                            }
+                        }
+                    }
+                }
+                res.add(count);
+            }
+        }
+        
+        return res;
+    }
+    
+    public int getId(int i, int j, int m) {
+        return i*m + j;
+    }
+    
+    class UnionFind{
+        public HashMap<Integer, Integer> father;
+        public int count;
+        public UnionFind(int n, int m) {
+            father = new HashMap<>();
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    int id = getId(i, j, m);
+                    father.put(id, id);
+                }
+            }
+            this.count = m * n;
+        }
+        
+        public int getNum() {
+            return count;
+        }
+        
+        public boolean isConnected(int id1, int id2) {
+            return compressed_find(id1) == compressed_find(id2);
+        }
+        
+        public int compressed_find(int id) { //find是找祖先，father只是父亲
+            int ancestor = fahter.get(id);
+            while(father.get(ancestor) != ancestor){
+                ancestor = father.get(ancestor);
+            }
+            //路径压缩
+            int fa = id;
+            while(father.get(fa) != fa) {
+                int tmp = father.get(fa);
+                father.put(fa, ancestor);
+                fa = tmp;
+            }
+            //end路径压缩
+            
+            return ancestor;
+        }
+        
+        public void union(int a, int b) {
+            int pa = compressed_find(a);
+            int pb = compressed_find(b);
+            
+            if(pa != pb) {
+                father.put(pa, pb); 
+            }
+        }
+    }
+    //a想与b搞上关系（a要连b），a说，这么着，我又不好意思，那我让我的祖先，
+    //管您的祖先，叫声爹！这样您就跟我连上关系吧，我们俩之间也不用有什么纠结.
+    
+    public boolean valid(int[][] island, int i, int j) {
+        if(i >= 0 && i < island.length && j >= 0 && j < island[0].length && island[i][j] == 1) return true;
+        return false;
+    }
+}
