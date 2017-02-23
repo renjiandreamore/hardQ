@@ -206,3 +206,49 @@ public class Solution {
         return res;
     }
 }
+
+
+
+public class 字典序排序 {
+    //For example, given 13, return: [1,10,11,12,13,2,3,4,5,6,7,8,9].
+
+       //想不出来fancy的数学解法，建立树，dfs正好是preorder正好是字典序
+    public List<Integer> lexicalOrder(int n) {
+        // List<Integer> res = new ArrayList<>();
+        // int curr = 1;
+        
+        // for(int i = 1; i <= n; i++) {
+        //     res.add(curr);
+        //     if(curr * 10 <= n){
+        //         curr *= 10;
+        //     }
+        //     else if(curr % 10 != 9 && curr + 1 <= n){
+        //         curr++;
+        //     }
+        //     else{
+        //         while((curr/10 % 10) == 9) {
+        //             curr /= 10;
+        //         }
+        //         curr = curr / 10 + 1;;
+        //     }
+        // }
+        
+        // return res;
+        
+        //dfs 建立树完了preorder正好是要的结果
+        
+        List<Integer> res = new ArrayList<>();
+        for(int i = 1; i < 10; i++){
+            dfs(i, n, res);
+        }
+        return res;
+    }
+    public void dfs(int crt, int n, List<Integer> res) {
+        if(crt > n) return;
+        
+        res.add(crt);
+        for(int i = 0; i < 10; i++) {
+            dfs(crt * 10 + i, n, res);
+        }
+    }
+}
