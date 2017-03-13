@@ -1,4 +1,17 @@
 public class Solution {
+    /*
+    For example,
+Given words = ["oath","pea","eat","rain"] and board =
+
+[
+  ['o','a','a','n'],
+  ['e','t','a','e'],
+  ['i','h','k','r'],
+  ['i','f','l','v']
+]
+Return ["eat","oath"].
+        
+    */
     public List<String> findWords(char[][] board, String[] words) {
         List<String> res = new ArrayList<String>();
         if(board == null || board.length == 0 || words == null || words.length == 0 ){
